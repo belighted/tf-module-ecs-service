@@ -10,7 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "75"
+  threshold           = lookup(var.cpu_threshold,"scale_up" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -29,7 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high_lb" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "75"
+  threshold           = lookup(var.cpu_threshold,"scale_up" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Average"
-  threshold           = "20"
+  threshold           = lookup(var.cpu_threshold,"scale_down" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -70,7 +70,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low_lb" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Average"
-  threshold           = "20"
+  threshold           = lookup(var.cpu_threshold,"scale_down" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -92,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_high" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "85"
+  threshold           = lookup(var.memory_threshold,"scale_up" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -111,7 +111,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_high_lb" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Maximum"
-  threshold           = "85"
+  threshold           = lookup(var.memory_threshold,"scale_up" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -133,7 +133,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_low" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Average"
-  threshold           = "20"
+  threshold           = lookup(var.memory_threshold,"scale_down" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name
@@ -152,7 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_low_lb" {
   namespace           = "AWS/ECS"
   period              = "60"
   statistic           = "Average"
-  threshold           = "20"
+  threshold           = lookup(var.memory_threshold,"scale_down" )
 
   dimensions = {
     ClusterName = var.ecs_cluster_name

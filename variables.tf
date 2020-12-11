@@ -31,10 +31,28 @@ variable "cpu" {
   //  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
 }
 
+variable "cpu_threshold" {
+  default = {
+    scale_down = 20
+    scale_up = 75
+  }
+  description = "CPU threshold for scaling in percents"
+}
+
 variable "memory" {
   default     = "0.5"
   description = "Fargate: vlaues: 0.5, 1, 2"
 }
+
+variable "memory_threshold" {
+  default = {
+    scale_down = 20
+    scale_up = 85
+  }
+  description = "Memory threshold for scaling in percents"
+}
+
+
 variable "vpc_id" {
   description = "VPC ID where the task will be created"
 }
