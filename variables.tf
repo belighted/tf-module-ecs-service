@@ -166,3 +166,7 @@ variable "ecs_schedule_expression" {
   default = ""
   description = "The scheduling expression. For example, cron(0 20 * * ? *) or rate(5 minutes)"
 }
+
+variable "ecs_launch_type" {
+  default = "FARGATE"
+}

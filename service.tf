@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = var.template
 
   # check task definition parameters compatibilies
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = [var.ecs_launch_type]
 
   cpu          = var.cpu
   memory       = var.memory
@@ -22,7 +22,7 @@ resource "aws_ecs_service" "service_lb_fargate" {
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
-  launch_type      = "FARGATE"
+  launch_type      = var.ecs_launch_type
   platform_version = var.ecs_fargate_platform_version
 
   #task_definition                   = aws_ecs_task_definition.task.arn
@@ -63,7 +63,7 @@ resource "aws_ecs_service" "service_fargate" {
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
-  launch_type      = "FARGATE"
+  launch_type      = var.ecs_launch_type
   platform_version = var.ecs_fargate_platform_version
 
   #task_definition                    = aws_ecs_task_definition.task.arn
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_event_target" "default" {
   role_arn  = aws_iam_role.ecs_task_execution_role.arn
 
   ecs_target = {
-    launch_type         = "FARGATE"
+    launch_type         = var.ecs_launch_type
     task_count          = "1"
     task_definition_arn = aws_ecs_task_definition.task.arn
 
