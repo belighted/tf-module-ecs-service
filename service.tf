@@ -89,7 +89,7 @@ resource "aws_ecs_service" "service_fargate" {
 }
 
 resource "aws_cloudwatch_event_rule" "default" {
-  count = var.scheduled_job
+  count = var.scheduled_job ? 1 : 0
   name        = var.service_name
   description = "Terraform managed - ${var.service_name}"
   is_enabled  = true
@@ -97,22 +97,22 @@ resource "aws_cloudwatch_event_rule" "default" {
 }
 
 resource "aws_cloudwatch_event_target" "default" {
-  count = var.scheduled_job
+  count = var.scheduled_job ? 1 : 0
 
   target_id = var.service_name
   arn       = var.ecs_cluster_id
-  rule      = aws_cloudwatch_event_rule.default.name
+  rule      = aws_cloudwatch_event_rule.default[count.index].name
   role_arn  = aws_iam_role.ecs_task_execution_role.arn
 
-  ecs_target = {
+  ecs_target {
     launch_type         = var.ecs_launch_type
     task_count          = "1"
     task_definition_arn = aws_ecs_task_definition.task.arn
 
     platform_version = var.ecs_fargate_platform_version
 
-    network_configuration = {
-    subnets          = [var.subnets_ids]
+    network_configuration {
+    subnets          = var.subnets_ids
     assign_public_ip = true
     security_groups  = [aws_security_group.service_lb_fargate.id]
     }
