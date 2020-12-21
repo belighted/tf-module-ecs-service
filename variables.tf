@@ -156,3 +156,13 @@ variable "assign_public_ip" {
   description = "In case of not using a NAT gateway and only relay on IGW this needs to be enable if the app call external resources"
   default = true
 }
+
+variable "scheduled_job" {
+  default = false
+  description = "Should be the ecs scheduled task created"
+}
+
+variable "ecs_schedule_expression" {
+  default = ""
+  description = "The scheduling expression. For example, cron(0 20 * * ? *) or rate(5 minutes)"
+}
