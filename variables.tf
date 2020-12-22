@@ -170,3 +170,13 @@ variable "ecs_schedule_expression" {
 variable "ecs_launch_type" {
   default = "FARGATE"
 }
+
+variable "scale" {
+  description = "Negative number means scale down, positive number means scale up, these are the number of new members"
+  default = {
+    cpu_up = 1
+    cpu_down = -1
+    memory_up = 1
+    memory_down = -1
+  }
+}

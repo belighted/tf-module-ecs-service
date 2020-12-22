@@ -213,7 +213,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_cpu" {
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment          = 1
+      scaling_adjustment          = lookup(var.scale,"cpu_up")
     }
   }
 
@@ -236,7 +236,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_cpu_lb" {
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment          = 1
+      scaling_adjustment          = lookup(var.scale,"cpu_up")
     }
   }
 
@@ -262,7 +262,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_cpu" {
 
     step_adjustment {
       metric_interval_upper_bound = 0
-      scaling_adjustment          = -1
+      scaling_adjustment          = lookup(var.scale,"cpu_down")
     }
   }
 
@@ -285,7 +285,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_cpu_lb" {
 
     step_adjustment {
       metric_interval_upper_bound = 0
-      scaling_adjustment          = -1
+      scaling_adjustment          = lookup(var.scale,"cpu_down")
     }
   }
 
@@ -311,7 +311,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_memory" {
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment          = 1
+      scaling_adjustment          = lookup(var.scale,"memory_up")
     }
   }
 
@@ -334,7 +334,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_memory_lb" {
 
     step_adjustment {
       metric_interval_lower_bound = 0
-      scaling_adjustment          = 1
+      scaling_adjustment          = lookup(var.scale,"memory_up")
     }
   }
 
@@ -360,7 +360,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_memory" {
 
     step_adjustment {
       metric_interval_upper_bound = 0
-      scaling_adjustment          = -1
+      scaling_adjustment          = lookup(var.scale,"memory_down")
     }
   }
 
@@ -383,7 +383,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_memory_lb" {
 
     step_adjustment {
       metric_interval_upper_bound = 0
-      scaling_adjustment          = -1
+      scaling_adjustment          = lookup(var.scale,"memory_down")
     }
   }
 
