@@ -18,7 +18,7 @@ resource "aws_ecs_task_definition" "task" {
 
 resource "aws_ecs_service" "service_lb_fargate" {
   # service with LB and Fargate
-  count = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "service_lb_fargate" {
 
 resource "aws_ecs_service" "service_fargate" {
   # service without LB and with Fargate
-  count = var.scheduled_job ? 0 : var.load_balancer_enabled ? 0 : 1
+  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 0 : 1
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id

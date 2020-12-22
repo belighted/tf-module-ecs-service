@@ -1,5 +1,5 @@
 resource "aws_alb_listener_rule" "https" {
-  count = var.load_balancer_enabled ? 1 : 0
+  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
 
   listener_arn = var.alb_listener_arn
 
@@ -20,7 +20,7 @@ resource "aws_alb_listener_rule" "https" {
 }
 
 resource "aws_alb_listener_rule" "http" {
-  count =  var.load_balancer_enabled ? 1 : 0
+  count =  var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
 
   listener_arn = var.alb_listener_arn_http
 

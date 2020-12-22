@@ -1,5 +1,5 @@
 resource "aws_alb_target_group" "target_group" {
-  count = var.load_balancer_enabled ? 1 : 0
+  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
 
   name                 = "ecs-${var.service_name}"
   target_type          = "ip" #for Fargate only IP
