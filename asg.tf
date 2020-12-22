@@ -2,7 +2,7 @@
 # AWS Auto Scaling - CloudWatch Alarm CPU High
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
-  count               = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-cpu-high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_high_lb" {
-  count               =  var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count               =  var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-cpu-high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high_lb" {
 # AWS Auto Scaling - CloudWatch Alarm CPU Low
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
-  count               =  var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count               =  var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-cpu-low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -62,7 +62,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_low_lb" {
-  count               = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-cpu-low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -84,7 +84,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low_lb" {
 # AWS Auto Scaling - CloudWatch Alarm Memory High
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "memory_high" {
-  count               = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-memory-high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -103,7 +103,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_high" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory_high_lb" {
-  count               = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-memory-high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -125,7 +125,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_high_lb" {
 # AWS Auto Scaling - CloudWatch Alarm Memory Low
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_cloudwatch_metric_alarm" "memory_low" {
-  count               = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-memory-low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -144,7 +144,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_low" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory_low_lb" {
-  count               = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count               = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   alarm_name          = "${var.service_name}-memory-low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -168,7 +168,7 @@ resource "aws_cloudwatch_metric_alarm" "memory_low_lb" {
 
 ### for targets that have load balancer the service is service_fargate and that needs to be created in advance!
 resource "aws_appautoscaling_target" "scale_target" {
-  count              = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -183,7 +183,7 @@ resource "aws_appautoscaling_target" "scale_target" {
 
 ### for targets that does not have load balancer the service is service_lb_fargate and that needs to be created in advance!
 resource "aws_appautoscaling_target" "scale_target_lb" {
-  count              = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -200,7 +200,7 @@ resource "aws_appautoscaling_target" "scale_target_lb" {
 # AWS Auto Scaling - Scaling Up Policy CPU
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "scale_up_policy_cpu" {
-  count              = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-up-policy-cpu"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -223,7 +223,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_cpu" {
 }
 
 resource "aws_appautoscaling_policy" "scale_up_policy_cpu_lb" {
-  count              = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-up-policy-cpu"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -249,7 +249,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_cpu_lb" {
 # AWS Auto Scaling - Scaling Down Policy CPU
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "scale_down_policy_cpu" {
-  count              = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-${var.environment}-scale-down-policy-cpu"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -272,7 +272,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_cpu" {
 }
 
 resource "aws_appautoscaling_policy" "scale_down_policy_cpu_lb" {
-  count              = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-down-policy-cpu"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -298,7 +298,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_cpu_lb" {
 # AWS Auto Scaling - Scaling Up Policy Memory
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "scale_up_policy_memory" {
-  count              = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-up-policy-mem"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -321,7 +321,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_memory" {
 }
 
 resource "aws_appautoscaling_policy" "scale_up_policy_memory_lb" {
-  count              = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-up-policy-mem"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -347,7 +347,7 @@ resource "aws_appautoscaling_policy" "scale_up_policy_memory_lb" {
 # AWS Auto Scaling - Scaling Down Policy Memory
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "scale_down_policy_memory" {
-  count              = var.scheduled_job ? 0 : !var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && !var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-down-policy-mem"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
@@ -370,7 +370,7 @@ resource "aws_appautoscaling_policy" "scale_down_policy_memory" {
 }
 
 resource "aws_appautoscaling_policy" "scale_down_policy_memory_lb" {
-  count              = var.scheduled_job ? 0 : var.load_balancer_enabled ? 1 : 0
+  count              = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0
   name               = "${var.service_name}-scale-down-policy-mem"
   service_namespace  = "ecs"
   resource_id        = "service/${var.ecs_cluster_name}/${var.service_name}"
