@@ -1,6 +1,6 @@
 ### non-efs task ###
 resource "aws_ecs_task_definition" "task" {
-  count = tobool(var.efs_variable["enable"]) ? 0 : 1
+  count = var.efs_enable ? 0 : 1
 
   family = var.service_name
 
@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "task" {
 ### non-efs services ###
 resource "aws_ecs_service" "service_lb_fargate" {
   # service with LB and Fargate
-  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0 && tobool(var.efs_variable["enable"]) ? 0 : 1
+  count = (var.scheduled_job ? 0 : 1) * (var.load_balancer_enabled ? 1 : 0 ) * (var.efs_enable ? 0 : 1)
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
@@ -62,7 +62,7 @@ resource "aws_ecs_service" "service_lb_fargate" {
 
 resource "aws_ecs_service" "service_fargate" {
   # service without LB and with Fargate
-  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 0 : 1 && tobool(var.efs_variable["enable"]) ? 0 : 1
+  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 0 : true && var.efs_enable ? 0 : 1
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
@@ -93,7 +93,7 @@ resource "aws_ecs_service" "service_fargate" {
 
 ### efs task ###
 resource "aws_ecs_task_definition" "task_efs" {
-  count = tobool(var.efs_variable["enable"]) ? 1 : 0 && var.scheduled_job ? 0 : 1
+  count = var.efs_enable ? 1 : 0
 
   family = var.service_name
 
@@ -128,7 +128,7 @@ resource "aws_ecs_task_definition" "task_efs" {
 ### efs services ###
 resource "aws_ecs_service" "service_efs_lb_fargate" {
   # service with LB and Fargate
-  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 1 : 0 && var.scheduled_job ? 0 : 1 && tobool(var.efs_variable["enable"]) ? 1 : 0
+  count = var.load_balancer_enabled ? 1 : false && var.efs_enable ? 1 : 0
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
@@ -169,7 +169,7 @@ resource "aws_ecs_service" "service_efs_lb_fargate" {
 
 resource "aws_ecs_service" "service_efs_fargate" {
   # service without LB and with Fargate
-  count = var.scheduled_job ? 0 : true && var.load_balancer_enabled ? 0 : 1 && tobool(var.efs_variable["enable"]) ? 1 : 0
+  count = var.load_balancer_enabled ? 0 : true && var.efs_enable ? 1 : 0
 
   name             = var.service_name
   cluster          = var.ecs_cluster_id
@@ -218,7 +218,7 @@ resource "aws_cloudwatch_event_target" "default" {
   ecs_target {
     launch_type         = var.ecs_launch_type
     task_count          = "1"
-    task_definition_arn = aws_ecs_task_definition.task.arn
+    task_definition_arn = aws_ecs_task_definition.task[0].arn
 
     platform_version = var.ecs_fargate_platform_version
 
