@@ -180,3 +180,14 @@ variable "scale" {
     memory_down = -1
   }
 }
+
+variable "efs_variable" {
+  type = map(string)
+
+  default = {
+    "name"                = ""
+    "enable"              = "false"
+    "file_system_id"      = ""
+    "file_root_directory" = ""
+  }
+}
