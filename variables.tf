@@ -192,3 +192,5 @@ variable "efs_variable" {
     "file_root_directory" = ""
   }
 }
+
+variable "aws_acm_domain" {}
